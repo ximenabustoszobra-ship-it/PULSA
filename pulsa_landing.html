@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PULSA — Mueve, Respira, Medita</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --deep-purple: #3B1F5C;
+    --mid-purple:  #6B3FA0;
+    --gold:        #C49A3C;
+    --gold-light:  #E8C97A;
+    --teal:        #2A7F7F;
+    --cream:       #FAF7F2;
+    --dark:        #1A1020;
+    --gray:        #6B6B6B;
+    --light-line:  #E8E0D5;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--deep-purple);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(196,154,60,0.12) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 9vw, 96px);
+    font-weight: 300;
+    color: #FAF7F2;
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 3vw, 26px);
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(250,247,242,0.65);
+    margin-bottom: 48px;
+    max-width: 520px;
+  }
+
+  .hero-triada {
+    display: flex;
+    gap: 0;
+    margin-bottom: 56px;
+  }
+
+  .triada-item {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(250,247,242,0.5);
+    padding: 0 20px;
+    border-right: 1px solid rgba(196,154,60,0.3);
+  }
+
+  .triada-item:last-child { border-right: none; }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--deep-purple);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 16px 40px;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .btn-primary:hover {
+    background: var(--gold-light);
+    transform: translateY(-1px);
+  }
+
+  .hero-author {
+    position: absolute;
+    bottom: 28px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: rgba(250,247,242,0.3);
+    text-transform: uppercase;
+  }
+
+  /* ── SECCIONES ── */
+  section { padding: 80px 24px; }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .section-eyebrow {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--deep-purple);
+    margin-bottom: 24px;
+  }
+
+  .section-title em { font-style: italic; }
+
+  .section-body {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--gray);
+    line-height: 1.8;
+    max-width: 620px;
+  }
+
+  .divider {
+    width: 48px;
+    height: 1px;
+    background: var(--gold);
+    margin: 32px 0;
+  }
+
+  /* ── QUÉ ES ── */
+  .que-es { background: var(--cream); }
+
+  .frase-grande {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px, 4vw, 38px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--deep-purple);
+    line-height: 1.4;
+    border-left: 2px solid var(--gold);
+    padding-left: 28px;
+    margin: 40px 0;
+  }
+
+  /* ── LAS TRES FASES ── */
+  .fases { background: var(--deep-purple); }
+  .fases .section-title { color: #FAF7F2; }
+  .fases .section-body { color: rgba(250,247,242,0.6); }
+  .fases .section-eyebrow { color: var(--gold); }
+  .fases .divider { background: var(--gold); }
+
+  .fases-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(196,154,60,0.2);
+    margin-top: 48px;
+    border: 1px solid rgba(196,154,60,0.2);
+  }
+
+  .fase-card {
+    background: var(--deep-purple);
+    padding: 40px 32px;
+  }
+
+  .fase-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: rgba(196,154,60,0.3);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .fase-nombre {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .fase-titulo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #FAF7F2;
+    margin-bottom: 12px;
+  }
+
+  .fase-desc {
+    font-size: 14px;
+    font-weight: 300;
+    color: rgba(250,247,242,0.55);
+    line-height: 1.7;
+  }
+
+  .fase-tiempo {
+    margin-top: 20px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: rgba(196,154,60,0.6);
+  }
+
+  /* ── BENEFICIOS ── */
+  .beneficios { background: #FAF7F2; }
+
+  .beneficios-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    margin-top: 48px;
+  }
+
+  .beneficio-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .beneficio-icon {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    background: rgba(196,154,60,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    margin-top: 2px;
+  }
+
+  .beneficio-text strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--deep-purple);
+    margin-bottom: 4px;
+  }
+
+  .beneficio-text span {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  /* ── A QUIÉN APUNTA ── */
+  .para-quien { background: var(--teal); }
+  .para-quien .section-title { color: #FAF7F2; }
+  .para-quien .section-eyebrow { color: rgba(250,247,242,0.6); }
+  .para-quien .divider { background: rgba(250,247,242,0.3); }
+
+  .para-quien-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+  }
+
+  .para-quien-item {
+    background: rgba(255,255,255,0.08);
+    padding: 24px;
+    border-left: 2px solid rgba(250,247,242,0.2);
+  }
+
+  .para-quien-item p {
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(250,247,242,0.85);
+    line-height: 1.7;
+  }
+
+  /* ── PROGRAMA ── */
+  .programa { background: var(--cream); }
+
+  .encuentros-list {
+    margin-top: 40px;
+    border-top: 1px solid var(--light-line);
+  }
+
+  .encuentro-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--light-line);
+    align-items: start;
+  }
+
+  .encuentro-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: rgba(196,154,60,0.4);
+    line-height: 1;
+    padding-top: 4px;
+  }
+
+  .encuentro-titulo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--deep-purple);
+    margin-bottom: 6px;
+  }
+
+  .encuentro-desc {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  /* ── PRECIOS ── */
+  .precios { background: var(--deep-purple); }
+  .precios .section-title { color: #FAF7F2; }
+  .precios .section-eyebrow { color: var(--gold); }
+  .precios .divider { background: var(--gold); }
+
+  .precios-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .precio-card {
+    border: 1px solid rgba(196,154,60,0.25);
+    padding: 36px 32px;
+    position: relative;
+  }
+
+  .precio-card.featured {
+    border-color: var(--gold);
+    background: rgba(196,154,60,0.06);
+  }
+
+  .precio-badge {
+    position: absolute;
+    top: -12px;
+    left: 24px;
+    background: var(--gold);
+    color: var(--deep-purple);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+  }
+
+  .precio-tipo {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .precio-titulo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: #FAF7F2;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  .precio-linea {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(196,154,60,0.15);
+  }
+
+  .precio-linea:last-of-type { border-bottom: none; }
+
+  .precio-label {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(250,247,242,0.6);
+  }
+
+  .precio-valor {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--gold-light);
+  }
+
+  .precio-nota {
+    font-size: 11px;
+    font-weight: 300;
+    color: rgba(250,247,242,0.35);
+    margin-top: 16px;
+    line-height: 1.6;
+  }
+
+  /* ── HORARIOS ── */
+  .horarios { background: var(--cream); }
+
+  .horarios-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+  }
+
+  .horario-card {
+    background: white;
+    border: 1px solid var(--light-line);
+    padding: 32px;
+  }
+
+  .horario-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+
+  .horario-tipo {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .horario-titulo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--deep-purple);
+    margin-bottom: 12px;
+  }
+
+  .horario-desc {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--gray);
+    line-height: 1.7;
+  }
+
+  .horario-detalle {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--light-line);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--deep-purple);
+  }
+
+  /* ── FORMULARIO ── */
+  .formulario { background: #FAF7F2; }
+
+  .form-wrapper {
+    margin-top: 40px;
+    border: 1px solid var(--light-line);
+    overflow: hidden;
+  }
+
+  .form-wrapper iframe {
+    width: 100%;
+    min-height: 700px;
+    border: none;
+    display: block;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark);
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: #FAF7F2;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .footer-sub {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(250,247,242,0.3);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .fases-grid { grid-template-columns: 1fr; }
+    .beneficios-grid { grid-template-columns: 1fr; }
+    .para-quien-grid { grid-template-columns: 1fr; }
+    .precios-grid { grid-template-columns: 1fr; }
+    .horarios-grid { grid-template-columns: 1fr; }
+    .triada-item { font-size: 9px; padding: 0 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">Ximena Bustos Zobra · Facilitadora de Breathwork, Meditación y Movimiento</p>
+  <h1 class="hero-title">PULSA<br><em>Mueve · Respira · Medita</em></h1>
+  <p class="hero-subtitle">Un programa de 6 encuentros para soltar lo que el cuerpo acumula y elevar tu frecuencia emocional</p>
+  <div class="hero-triada">
+    <span class="triada-item">Movimiento somático</span>
+    <span class="triada-item">Breathwork</span>
+    <span class="triada-item">Meditación</span>
+  </div>
+  <a href="#inscripcion" class="btn-primary">Quiero inscribirme</a>
+  <p class="hero-author">Online por Zoom · Individual y Grupal</p>
+</section>
+
+<!-- QUÉ ES -->
+<section class="que-es">
+  <div class="container">
+    <p class="section-eyebrow">El Método</p>
+    <h2 class="section-title">25 minutos que<br><em>cambian el estado</em></h2>
+    <div class="divider"></div>
+    <p class="section-body">
+      PULSA es una práctica de 25 minutos que combina movimiento consciente, respiración profunda y meditación en una secuencia con lógica científica: el cuerpo primero se mueve para soltar la tensión, después respira para liberar lo emocional, y finalmente se silencia para integrar.
+    </p>
+    <div class="frase-grande">
+      "El cuerpo guarda lo que la mente no pudo procesar.<br>El PULSA crea las condiciones para soltarlo."
+    </div>
+    <p class="section-body">
+      En 6 encuentros aprendés a usar el movimiento, el breathwork y la meditación como herramientas concretas de regulación emocional. El programa es 100% online por Zoom y combina teoría breve con práctica real cada clase.
+    </p>
+  </div>
+</section>
+
+<!-- LAS TRES FASES -->
+<section class="fases">
+  <div class="container">
+    <p class="section-eyebrow">La Técnica</p>
+    <h2 class="section-title">Tres fases.<br><em>Un solo arco.</em></h2>
+    <div class="divider"></div>
+    <p class="section-body">Cada práctica PULSA recorre tres momentos en orden preciso. El orden no es arbitrario — responde a cómo funciona el sistema nervioso.</p>
+    <div class="fases-grid">
+      <div class="fase-card">
+        <div class="fase-num">01</div>
+        <div class="fase-nombre">Fase 1</div>
+        <div class="fase-titulo">Movimiento Somático</div>
+        <div class="fase-desc">El cuerpo se sacude, se abre y se activa. La tensión muscular crónica empieza a soltarse. El sistema nervioso se prepara para recibir.</div>
+        <div class="fase-tiempo">7 minutos</div>
+      </div>
+      <div class="fase-card">
+        <div class="fase-num">02</div>
+        <div class="fase-nombre">Fase 2</div>
+        <div class="fase-titulo">Respiración Consciente Conectada</div>
+        <div class="fase-desc">Respiración circular, profunda y continua. Las ondas cerebrales bajan, el subconsciente se abre y las emociones guardadas encuentran su camino de salida.</div>
+        <div class="fase-tiempo">13 minutos</div>
+      </div>
+      <div class="fase-card">
+        <div class="fase-num">03</div>
+        <div class="fase-nombre">Fase 3</div>
+        <div class="fase-titulo">Meditación y Silencio</div>
+        <div class="fase-desc">Llegada, anclaje, protección energética y silencio real. El sistema nervioso integra lo que surgió. El cuerpo descansa en una frecuencia más alta.</div>
+        <div class="fase-tiempo">5 minutos</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFICIOS -->
+<section class="beneficios">
+  <div class="container">
+    <p class="section-eyebrow">Para qué sirve</p>
+    <h2 class="section-title">Lo que cambia<br><em>con la práctica</em></h2>
+    <div class="divider"></div>
+    <div class="beneficios-grid">
+      <div class="beneficio-item">
+        <div class="beneficio-icon">🧠</div>
+        <div class="beneficio-text">
+          <strong>Regulación del sistema nervioso</strong>
+          <span>El cuerpo aprende a volver a la calma más rápido después de situaciones de estrés.</span>
+        </div>
+      </div>
+      <div class="beneficio-item">
+        <div class="beneficio-icon">💜</div>
+        <div class="beneficio-text">
+          <strong>Liberación emocional</strong>
+          <span>La respiración permite procesar lo que el cuerpo guarda y la mente sola no puede liberar.</span>
+        </div>
+      </div>
+      <div class="beneficio-item">
+        <div class="beneficio-icon">😴</div>
+        <div class="beneficio-text">
+          <strong>Mejor calidad de sueño</strong>
+          <span>Cuando el sistema nervioso se regula, el cuerpo puede descansar con más profundidad.</span>
+        </div>
+      </div>
+      <div class="beneficio-item">
+        <div class="beneficio-icon">🎯</div>
+        <div class="beneficio-text">
+          <strong>Mayor claridad mental</strong>
+          <span>Después de la práctica: más foco, menos ruido interno y mayor capacidad de tomar decisiones.</span>
+        </div>
+      </div>
+      <div class="beneficio-item">
+        <div class="beneficio-icon">🌿</div>
+        <div class="beneficio-text">
+          <strong>Conexión con el cuerpo</strong>
+          <span>Recuperar la relación con las propias sensaciones y escuchar al cuerpo antes de que hable con dolor.</span>
+        </div>
+      </div>
+      <div class="beneficio-item">
+        <div class="beneficio-icon">⚡</div>
+        <div class="beneficio-text">
+          <strong>Mayor energía vital</strong>
+          <span>El movimiento consciente y el breathwork activan la energía que el estrés crónico apaga.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- A QUIÉN APUNTA -->
+<section class="para-quien">
+  <div class="container">
+    <p class="section-eyebrow">¿Es para mí?</p>
+    <h2 class="section-title">Este programa<br><em>es para vos si...</em></h2>
+    <div class="divider"></div>
+    <div class="para-quien-grid">
+      <div class="para-quien-item">
+        <p>Sentís que cargás demasiado — en el cuerpo, en las emociones — y necesitás una herramienta real para soltar.</p>
+      </div>
+      <div class="para-quien-item">
+        <p>Querés empezar a meditar pero la mente no para o no sabés por dónde empezar.</p>
+      </div>
+      <div class="para-quien-item">
+        <p>Vivís con un nivel de estrés o ansiedad que ya se instaló como norma y querés cambiarlo.</p>
+      </div>
+      <div class="para-quien-item">
+        <p>Tenés emociones que no podés nombrar pero sí sentís en el cuerpo — tensión, opresión, agotamiento emocional.</p>
+      </div>
+      <div class="para-quien-item">
+        <p>Buscás una práctica con base científica, sin tecnicismos esotéricos, que realmente funcione en el cuerpo.</p>
+      </div>
+      <div class="para-quien-item">
+        <p>Querés incorporar una herramienta de bienestar diaria que no te lleve más de 25 minutos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EL PROGRAMA -->
+<section class="programa">
+  <div class="container">
+    <p class="section-eyebrow">Los 6 Encuentros</p>
+    <h2 class="section-title">Un recorrido<br><em>con dirección</em></h2>
+    <div class="divider"></div>
+    <p class="section-body">Cada encuentro combina teoría breve y práctica real. Llegás, aprendés y vivís la experiencia en el mismo espacio.</p>
+    <div class="encuentros-list">
+      <div class="encuentro-item">
+        <div class="encuentro-num">01</div>
+        <div>
+          <div class="encuentro-titulo">Tu Cuerpo Como Mapa</div>
+          <div class="encuentro-desc">La somática y la Escala de Hawkins. Por qué las emociones viven en el cuerpo y cómo el PULSA trabaja con ellas.</div>
+        </div>
+      </div>
+      <div class="encuentro-item">
+        <div class="encuentro-num">02</div>
+        <div>
+          <div class="encuentro-titulo">La Mochila Emocional</div>
+          <div class="encuentro-desc">Trauma T y trauma t. Las 4 respuestas al estrés. Por qué el cuerpo guarda lo que la mente no procesó.</div>
+        </div>
+      </div>
+      <div class="encuentro-item">
+        <div class="encuentro-num">03</div>
+        <div>
+          <div class="encuentro-titulo">El Nervio Vago y el Sistema Nervioso</div>
+          <div class="encuentro-desc">El nervio vago como regulador central. Tono vagal. Cómo activarlo con movimiento, respiración y silencio.</div>
+        </div>
+      </div>
+      <div class="encuentro-item">
+        <div class="encuentro-num">04</div>
+        <div>
+          <div class="encuentro-titulo">La Respiración Consciente Conectada</div>
+          <div class="encuentro-desc">La técnica central del breathwork. Qué pasa en el cuerpo y el cerebro. El arco emocional de una sesión.</div>
+        </div>
+      </div>
+      <div class="encuentro-item">
+        <div class="encuentro-num">05</div>
+        <div>
+          <div class="encuentro-titulo">Meditación, Silencio y Protección Energética</div>
+          <div class="encuentro-desc">Desmitificar la meditación. Los 4 pasos del PULSA. La protección energética como herramienta diaria.</div>
+        </div>
+      </div>
+      <div class="encuentro-item">
+        <div class="encuentro-num">06</div>
+        <div>
+          <div class="encuentro-titulo">Integración · Tu PULSA Diario</div>
+          <div class="encuentro-desc">Neurociencia del hábito. Tu ritual personal de 25 minutos. Compromiso de 21 días y círculo de cierre.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRECIOS -->
+<section class="precios">
+  <div class="container">
+    <p class="section-eyebrow">Modalidades</p>
+    <h2 class="section-title">Elegí el formato<br><em>que más te sirve</em></h2>
+    <div class="divider"></div>
+    <div class="precios-grid">
+
+      <div class="precio-card">
+        <div class="precio-tipo">Sesión Individual</div>
+        <div class="precio-titulo">Online por Zoom<br>a tu horario</div>
+        <div class="precio-linea">
+          <span class="precio-label">Sesión individual suelta</span>
+          <span class="precio-valor">$66.000</span>
+        </div>
+        <div class="precio-linea">
+          <span class="precio-label">Programa completo · 6 sesiones</span>
+          <span class="precio-valor">$350.000</span>
+        </div>
+        <p class="precio-nota">Sesiones de 1 hora. Horario a coordinar por WhatsApp según tu disponibilidad.</p>
+      </div>
+
+      <div class="precio-card featured">
+        <div class="precio-badge">Grupal</div>
+        <div class="precio-tipo">Sesión Grupal</div>
+        <div class="precio-titulo">Online por Zoom<br>Martes 19:00 hs</div>
+        <div class="precio-linea">
+          <span class="precio-label">Sesión grupal suelta</span>
+          <span class="precio-valor">$30.000</span>
+        </div>
+        <div class="precio-linea">
+          <span class="precio-label">Programa completo · 6 sesiones</span>
+          <span class="precio-valor">$150.000</span>
+        </div>
+        <p class="precio-nota">La energía grupal amplifica la experiencia. Martes a las 19:00 hs por Zoom.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HORARIOS -->
+<section class="horarios">
+  <div class="container">
+    <p class="section-eyebrow">Cómo funciona</p>
+    <h2 class="section-title">Online y<br><em>a tu medida</em></h2>
+    <div class="divider"></div>
+    <div class="horarios-grid">
+      <div class="horario-card">
+        <div class="horario-icon">👤</div>
+        <div class="horario-tipo">Individual</div>
+        <div class="horario-titulo">A tu horario</div>
+        <div class="horario-desc">Las sesiones individuales se coordinan directamente por WhatsApp según tu disponibilidad. Atención personalizada en cada encuentro.</div>
+        <div class="horario-detalle">📱 Coordiná tu horario por WhatsApp</div>
+      </div>
+      <div class="horario-card">
+        <div class="horario-icon">👥</div>
+        <div class="horario-tipo">Grupal</div>
+        <div class="horario-titulo">Martes · 19:00 hs</div>
+        <div class="horario-desc">Las sesiones grupales son todos los martes a las 19:00 hs por Zoom. La dinámica grupal sostiene y amplifica la experiencia de cada participante.</div>
+        <div class="horario-detalle">🖥️ Online por Zoom · Martes 19:00 hs</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMULARIO -->
+<section class="formulario" id="inscripcion">
+  <div class="container">
+    <p class="section-eyebrow">Inscripción</p>
+    <h2 class="section-title">Empezá<br><em>tu PULSA</em></h2>
+    <div class="divider"></div>
+    <p class="section-body">Completá el formulario y nos ponemos en contacto para confirmar tu lugar y modalidad.</p>
+    <div class="form-wrapper">
+      <iframe
+        src="https://docs.google.com/forms/d/e/1FAIpQLScMNXoOrkL6ox0DCdlbPh3rA7oCQcvfAXlsyekygHhNOT4OgQ/viewform?embedded=true"
+        width="100%"
+        height="700"
+        frameborder="0"
+        marginheight="0"
+        marginwidth="0">
+        Cargando formulario…
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">PULSA®</div>
+  <p class="footer-sub">Ximena Bustos Zobra · Facilitadora de Breathwork, Meditación y Movimiento</p>
+</footer>
+
+</body>
+</html>
